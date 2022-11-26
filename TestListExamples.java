@@ -1,34 +1,51 @@
 import static org.junit.Assert.*;
 import java.beans.Transient;
 import org.junit.*;
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.LinkedList;
 public class TestListExamples {
-  // Write your grading tests here!
-  @Test 
-	public void testfilter() {
-    ArrayList<String> input1 = new ArrayList();
-    input1.add("apple");
-    input1.add("hello");
-    input1.add("amazing");
-    List <String> expected = new ArrayList();
-    expected.add("apple");
-    expected.add("amazing");
-    assertArrayEquals(expected.toArray(), ListExamples.filter(input1, new TestListExamples()).toArray());
-	}
-  @Test
-  public void testmerge() {
-    List<String> list1 = new ArrayList<String>();
-    list1.add("add");
-    list1.add("amazing");
-    List<String> list2 = new ArrayList<String>();
-    list2.add("amazing");
-    list2.add("zoo");
-    List<String> expected = new ArrayList<String>();
-    expected.add("add");
-    expected.add("amazing");
-    expected.add("zoo");
-    assertArrayEquals(expected, ListExamples.merge(list1,list2));
+ // Write your grading tests here!
+ 
+ @Test
+ public void testfilter(){
+   List<String> actual= new LinkedList<>();
+   List<String> expected= new LinkedList<>();
+   StringChecker sc = new StringCheck();
+   actual.add("bacon");
+   actual.add("baconbits");
+   actual.add("letsgetbacon");
+   expected.add("baconbits");
+   expected.add("letsgetbacon");
+   actual = ListExamples.filter(actual, sc);
+   assertArrayEquals(expected.toArray(), actual.toArray()); 
+ }
+ 
+ @Test
+ public void testmerge(){
+   List<String> actual1= new LinkedList<>();
+   List<String> actual2= new LinkedList<>();
+   actual1.add("A");
+   actual1.add("C");
+   actual1.add("E");
+   actual2.add("B");
+   actual2.add("D");
+   actual1 = ListExamples.merge(actual1,actual2);
+   List<String> expected= new LinkedList<>();
+   expected.add("A");
+   expected.add("B");
+   expected.add("C");
+   expected.add("D");
+   expected.add("E");
+   assertArrayEquals(expected.toArray(), expected.toArray());
+ }
 }
+ 
+class StringCheck implements StringChecker{
+ public boolean checkString(String s){
+ if(s.length() > 5){
+   return true;
+ }
+ return false;
+}
+ 
 }
