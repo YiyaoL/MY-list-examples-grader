@@ -39,7 +39,6 @@ public class TestListExamples {
    assertArrayEquals(expected.toArray(), expected.toArray());
  }
 }
- 
 class StringCheck implements StringChecker{
  public boolean checkString(String s){
  if(s.length() > 5){
