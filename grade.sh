@@ -1,9 +1,10 @@
-CPATH=".:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar"
-rm -rf student-submission
-git clone $1 student-submission
+CPATH=".;lib/hamcrest-core-1.3.jar;lib/junit-4.13.2.jar"
+rm -rf student-submission 
+git clone $1 student-submission 
+cp -r lib student-submission 
 
 if [ -e student-submission/ListExamples.java ]; then
-    cp TestListExamples.java student-submission
+    cp TestListExamples.java student-submission 
     cd student-submission
     echo "copied TestListExamples.java"
 else
@@ -11,7 +12,7 @@ else
     exit 1
 fi
 
-javac -cp $CPATH *.java
+javac -cp $CPATH *.java 
 if [ $? -eq 0 ]; then
     echo "Compiled."
 else
@@ -21,6 +22,6 @@ else
 fi
 
 echo "Running tests..."
-java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > testout.txt
+java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > testout.txt 2> testerr.txt
 echo "Test output:"
-grep -i "test" testout.txt
+grep -i "test" testout.txt > grepout.txt 2>greperr.txt
