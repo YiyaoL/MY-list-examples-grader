@@ -1,39 +1,41 @@
-# Lab Report 5
+# Lab Report 5: Autograder
 
 ## 1. grade.sh code
 ```
-CPATH=".;lib/hamcrest-core-1.3.jar;lib/junit-4.13.2.jar"
+CPATH=".:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar"
+
 rm -rf student-submission
 git clone $1 student-submission
-cp -r lib student-submission
+cp TestListExamples.java student-submission/
 
-if [ -e student-submission/ListExamples.java ]; then
-    cp TestListExamples.java student-submission
-    cd student-submission
-    echo "copied TestListExamples.java"
+if [[ -e student-submission/ListExamples.java ]]
+then
+    echo "File exists!"
 else
-    echo "file doesn't exist"
+    echo "File not found. Please try again."
     exit 1
 fi
 
-javac -cp $CPATH *.java
+cd student-submission
+
+javac -cp $CPATH *.java 
 if [ $? -eq 0 ]; then
-    echo "Compiled."
+    echo "Compiled Successfully!"
 else
-    echo "Failed to compile..."
-    echo $?
+    echo "Failed to compile. Please try again."
     exit 1
 fi
 
-echo "Running tests..."
+echo "Begin running tests."
+
 java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > testout.txt
 echo "Test output:"
-grep -i "test" testout.txt
+grep -i "test" testout.txt 
 ```
 ---
 ## 2. Result from three submissions
 
-**My code doesn't work for the browser interface because of the naming error I mentioned in [this piazza post](https://piazza.com/class/l7pbb88wlepvh/post/598). I've tried (1)changing CPATH to the linux format and running in ieng, and (2)[this stack exchange post](https://unix.stackexchange.com/questions/391223/why-am-i-getting-line-1-r-command-not-found), but none of them worked. The following report is based on running `bash grade.sh <repo link>` in my local terminal.**
+**I encountered the naming error [as described in this piazza post](https://piazza.com/class/l7pbb88wlepvh/post/598) when submitting the report the first time. After following [this article suggested by prof. Politz](https://medium.com/@csmunuku/windows-and-linux-eol-sequence-configure-vs-code-and-git-37be98ef71df) to change the EOL, and cloning the repo to run in ieng6 server, I can successfully run the grader in the browser.**
 
 - First repo
      ![screenshot1](1.png)
@@ -48,34 +50,34 @@ We will store all standard output in the format `<command>.out.txt`, and all sta
 
 (1)
 ```
-CPATH=".;lib/hamcrest-core-1.3.jar;lib/junit-4.13.2.jar"
-rm -rf student-submission > rm.out.txt  2> rm.err.txt
+CPATH=".:../lib/hamcrest-core-1.3.jar:../lib/junit-4.13.2.jar"
+rm -rf student-submission > rm.out.txt 2> rm.err.txt
 git clone $1 student-submission > clone.out.txt 2> clone.err.txt
-cp -r lib student-submission > cp.out.txt 2> cp.err.txt
+cp TestListExamples.java student-submission/ > cp.out.txt 2> cp.err.txt
 ```
-clone.err has `Cloning into 'student-submission'...'`, all other stdout and stderr are empty.
+All stdout and stderr are empty and the exit codes should be 0. 
 
 (2)
 ```
-if [ -e student-submission/ListExamples.java ]; then
-    cp TestListExamples.java student-submission > cp.out.txt 2> cp.err.txt
-    cd student-submission
-    echo "copied TestListExamples.java"
+if [[ -e student-submission/ListExamples.java ]]
+then
+    echo "File exists!"
 else
-    echo "file doesn't exist"
+    echo "File not found. Please try again."
     exit 1
 fi
 ```
-The first if statement is *True* because the java file exists in the student-submission folder. Both cp.out and cp.err are empty. The else part is not run.
+The first if statement is *True* because the java file exists in the student-submission folder. The else part is not run.
 
 (3)
 ```
+cd student-submission
+
 javac -cp $CPATH *.java > javac.out.txt 2> javac.err.txt
 if [ $? -eq 0 ]; then
-    echo "Compiled."
+    echo "Compiled Successfully!"
 else
-    echo "Failed to compile..."
-    echo $?
+    echo "Failed to compile. Please try again."
     exit 1
 fi
 ```
@@ -83,15 +85,18 @@ fi
 
 (4)
 ```
-echo "Running tests..."
+echo "Begin running tests."
+
 java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > testout.txt 2> testerr.txt
 echo "Test output:"
-grep -i "test" testout.txt > grepout.txt 2>greperr.txt
+grep -i "test" testout.txt  > grepout.txt 2>greperr.txt
 ```
 grepout is "OK (2 tests)", and testout is 
     `JUnit version 4.13.2
     ..
-    Time: 0.028
+    Time: 0.01
     OK (2 tests)`.
 
 All other stdout and stderr are empty. This is because the tests run successfully with exit code 0 and we can find "test" in the JUnit output. 
+
+---
