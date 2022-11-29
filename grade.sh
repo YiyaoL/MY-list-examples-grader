@@ -24,7 +24,6 @@ fi
 
 echo "Begin running tests."
 
-java -cp $CPATH org.junit.runner.JUnitCore TestListExamples
+java -cp $CPATH org.junit.runner.JUnitCore TestListExamples > testout.txt
 echo "Test output:"
 grep -i "test" testout.txt 
-cat testout.txt
